@@ -23,7 +23,7 @@ public class WaProtocol {
 
     public static final byte HANDLER_ERROR = -1;
 
-    public static final byte HANDEL_BUSY = -2;
+    public static final byte HANDLER_BUSY = -2;
 
     //provider端向registry发送注册信息的code
     public static final byte PUBLISH_SERVICE = 65;

@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @Auther: XF
  * @Date: 2018/10/3 17:12
- * @Description:
+ * @Description: 网络传输的唯一对象
  */
 public class RemotingTransporter extends ByteHolder{
 
