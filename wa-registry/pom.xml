@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wa-remoting</artifactId>
+    <artifactId>wa-registry</artifactId>
     <build>
         <plugins>
             <plugin>
@@ -24,43 +24,15 @@
     </build>
 
     <dependencies>
-
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.0.Final</version>
-        </dependency>
-
-
-
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.8.17</version>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/org.xerial.snappy/snappy-java -->
-        <dependency>
-            <groupId>org.xerial.snappy</groupId>
-            <artifactId>snappy-java</artifactId>
-            <version>1.1.4</version>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.9</version>
         </dependency>
         <dependency>
             <groupId>com.xf</groupId>
             <artifactId>wa-common</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>

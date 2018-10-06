@@ -11,6 +11,8 @@
     <modules>
         <module>wa-remoting</module>
         <module>wa-common</module>
+        <module>wa-client</module>
+        <module>wa-registry</module>
     </modules>
 
     <dependencies>

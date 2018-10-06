@@ -84,9 +84,9 @@ public abstract class NettyRemotingBase {
             RemotingTransporter remotingTransporter = response.waitResponse();
             if (remotingTransporter == null) {
                 if (response.isSendRequestOK()) { //客户端发送成功，但服务器端处理超时
-                    throw new RemotingTimeoutException(ConnectionUtils.parseChannelRemotingAddr(channel), timeoutMillis, response.getCause());
+                    throw new RemotingTimeoutException(ConnectionUtils.parseChannelRemoteAddr(channel), timeoutMillis, response.getCause());
                 } else {  //客户端发送失败
-                    throw new RemotingSendRequestException(ConnectionUtils.parseChannelRemotingAddr(channel), response.getCause());
+                    throw new RemotingSendRequestException(ConnectionUtils.parseChannelRemoteAddr(channel), response.getCause());
                 }
             }
             return remotingTransporter;
@@ -96,7 +96,7 @@ public abstract class NettyRemotingBase {
     }
 
     //channelRead0()对应的具体实现
-    public void processMessageReceive(ChannelHandlerContext ctx, RemotingTransporter msg) {
+    public void processMessageReceived(ChannelHandlerContext ctx, RemotingTransporter msg) {
         if (logger.isDebugEnabled()) {
             logger.debug("channel [] received RemotingTransporter is [{}]", ctx.channel(), msg);
         }
@@ -148,11 +148,11 @@ public abstract class NettyRemotingBase {
                     try {
                         RPCHook rpcHook = NettyRemotingBase.this.getRPCHook();
                         if (rpcHook != null) {
-                            rpcHook.doBeforeRequest(ConnectionUtils.parseChannelRemotingAddr(ctx.channel()), remotingTransporter);
+                            rpcHook.doBeforeRequest(ConnectionUtils.parseChannelRemoteAddr(ctx.channel()), remotingTransporter);
                         }
                         final RemotingTransporter response = pair.getKey().processRequest(ctx, remotingTransporter);
                         if (rpcHook != null) {
-                            rpcHook.doAfterResponse(ConnectionUtils.parseChannelRemotingAddr(ctx.channel()), remotingTransporter, response);
+                            rpcHook.doAfterResponse(ConnectionUtils.parseChannelRemoteAddr(ctx.channel()), remotingTransporter, response);
                         }
                         if (null != response) {
                             ctx.writeAndFlush(response).addListener(new ChannelFutureListener() {
