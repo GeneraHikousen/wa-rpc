@@ -217,6 +217,18 @@ public class ZKRegistry {
     }
 
     /**
+     * 关闭与zk的连接
+     */
+    public void stop(){
+        try {
+            if(zk!=null)
+                zk.close();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 单例模式，只允许一个实例
      * 如果要改配置。。。
      * @return
