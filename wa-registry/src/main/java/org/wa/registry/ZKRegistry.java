@@ -26,20 +26,22 @@ public class ZKRegistry {
 
     private static Logger logger = LoggerFactory.getLogger(ZKRegistry.class);
 
-    private static ZKRegistry INSTANCE;
-
     private ZKServiceConfig config;
 
     private ZooKeeper zk;
 
     private HashMap<String, Set<String>> serviceTable = new HashMap<>();
 
-    private ZKRegistry(ZKServiceConfig config) {
-        this.config = config;
-        init();
+    public ZKRegistry(){
     }
 
-    private void init() {
+    public ZKRegistry(ZKServiceConfig config) {
+        this.config = config;
+    }
+
+    public void start(){
+        if(config==null)
+            config=new ZKServiceConfig();
         connectZK();
         createRootNodeIfNotExist();
         watchRootNode();
@@ -192,7 +194,7 @@ public class ZKRegistry {
             if(stat==null){
                 registerService(serviceName);
             }
-            zk.create(path, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+            zk.create(path, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
         } catch (KeeperException | InterruptedException e) {
             logger.error("create zk node [{}] error [{}]", path, e.getMessage());
             return false;
@@ -228,19 +230,4 @@ public class ZKRegistry {
         }
     }
 
-    /**
-     * 单例模式，只允许一个实例
-     * 如果要改配置。。。
-     * @return
-     */
-    public static ZKRegistry newInstance(){
-        if(INSTANCE==null){
-            synchronized (ZKRegistry.class){
-                if(INSTANCE==null){
-                    INSTANCE = new ZKRegistry(new ZKServiceConfig());
-                }
-            }
-        }
-        return INSTANCE;
-    }
 }

@@ -3,7 +3,7 @@ package org.wa.registry;
 /**
  * @Auther: XF
  * @Date: 2018/10/5 22:46
- * @Description:
+ * @Description: zk注册中心的配置
  */
 public class ZKServiceConfig {
 
@@ -13,14 +13,10 @@ public class ZKServiceConfig {
     /*注册中心在zk的目录,默认是  {@link DEFAULT_ROOT_PATH}*/
     private String rootPath;
 
-    /*服务信息在注册中心的位置*/
-    private String dataPath;
-
     private int zkSessionTimeout;
 
     private static final String DEFAULT_ADDR = "hadoop2:2181";
     private static final String DEFAULT_ROOT_PATH = "/rpcService";
-    private static final String DEFAULT_DATA_PATH = "/rpcService/service";
 
     private static final int DEFAULT_ZK_SESSION_TIMEOUT = 5000;
 
@@ -36,7 +32,6 @@ public class ZKServiceConfig {
         this.addr = addr;
         this.rootPath = rootPath;
         this.zkSessionTimeout = DEFAULT_ZK_SESSION_TIMEOUT;
-        this.dataPath = DEFAULT_DATA_PATH;
     }
 
     public String getAddr() {
@@ -63,11 +58,4 @@ public class ZKServiceConfig {
         this.zkSessionTimeout = zkSessionTimeout;
     }
 
-    public String getDataPath() {
-        return dataPath;
-    }
-
-    public void setDataPath(String dataPath) {
-        this.dataPath = dataPath;
-    }
 }
