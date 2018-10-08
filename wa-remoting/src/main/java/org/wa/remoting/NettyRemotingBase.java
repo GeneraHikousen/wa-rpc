@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wa.common.exception.remoting.RemotingSendRequestException;
 import org.wa.common.exception.remoting.RemotingTimeoutException;
-import org.wa.common.protocal.WaProtocol;
+import org.wa.common.protocal.WaProtocal;
 import org.wa.common.utils.Pair;
 import org.wa.remoting.model.NettyChannelInactiveProcessor;
 import org.wa.remoting.model.NettyRequestProcessor;
@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.wa.common.protocal.WaProtocol.REQUEST_REMOTING;
-import static org.wa.common.protocal.WaProtocol.RESPONSE_REMOTING;
+import static org.wa.common.protocal.WaProtocal.REQUEST_REMOTING;
+import static org.wa.common.protocal.WaProtocal.RESPONSE_REMOTING;
 
 /**
  * @Auther: XF
@@ -37,7 +37,7 @@ public abstract class NettyRemotingBase {
     //如果没有对创建的Netty网络段注入默认的处理器时，默认使用该处理器
     protected Pair<NettyRequestProcessor, ExecutorService> defaultRequestProcessor;
 
-    //netty网络段channelInactive时间发生时的处理器
+    //netty网络段channelInactive事件发生时的处理器
     protected Pair<NettyChannelInactiveProcessor, ExecutorService> defaultChannelInactiveProcessor;
 
     protected final ExecutorService publicExecutor = Executors.newFixedThreadPool(4, new ThreadFactory() {
@@ -167,7 +167,7 @@ public abstract class NettyRemotingBase {
                     } catch (Exception e) {
                         logger.error("process occur exception [{}]", e.getMessage());
                         //向客户端发送出错信息
-                        final RemotingTransporter response = RemotingTransporter.newInstance(remotingTransporter.getOpaque(), WaProtocol.RESPONSE_REMOTING, WaProtocol.HANDLER_ERROR, null);
+                        final RemotingTransporter response = RemotingTransporter.newInstance(remotingTransporter.getOpaque(), WaProtocal.RESPONSE_REMOTING, WaProtocal.HANDLER_ERROR, null);
                         ctx.writeAndFlush(response);
                     }
                 }
@@ -176,7 +176,7 @@ public abstract class NettyRemotingBase {
                 pair.getValue().submit(run);
             } catch (Exception e) {
                 logger.error("server is busy,[{}]", e.getMessage());
-                final RemotingTransporter response = RemotingTransporter.newInstance(remotingTransporter.getOpaque(), WaProtocol.RESPONSE_REMOTING, WaProtocol.HANDLER_BUSY, null);
+                final RemotingTransporter response = RemotingTransporter.newInstance(remotingTransporter.getOpaque(), WaProtocal.RESPONSE_REMOTING, WaProtocal.HANDLER_BUSY, null);
                 ctx.writeAndFlush(response);
             }
         }

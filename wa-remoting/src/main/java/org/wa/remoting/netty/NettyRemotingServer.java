@@ -21,7 +21,6 @@ import org.wa.common.utils.NamedThreadFactory;
 import org.wa.common.utils.NativeSupport;
 import org.wa.common.utils.Pair;
 import org.wa.remoting.NettyRemotingBase;
-import org.wa.remoting.NettyServerConfig;
 import org.wa.remoting.RPCHook;
 import org.wa.remoting.model.NettyChannelInactiveProcessor;
 import org.wa.remoting.model.NettyRequestProcessor;
@@ -103,12 +102,6 @@ public class NettyRemotingServer extends NettyRemotingBase implements RemotingSe
         return NativeSupport.isSupportNativeET();
     }
 
-
-    @Override
-    protected RPCHook getRPCHook() {
-        return null;
-    }
-
     @Override
     public void registerProcessor(byte requestCode, NettyRequestProcessor processor, ExecutorService executor) {
         ExecutorService executorThis = executor;
@@ -125,7 +118,7 @@ public class NettyRemotingServer extends NettyRemotingBase implements RemotingSe
         if(executorThis==null){
             executorThis = this.publicExecutor;
         }
-        Pair<NettyChannelInactiveProcessor,ExecutorService> pair = new Pair<>(processor,executor);
+        Pair<NettyChannelInactiveProcessor,ExecutorService> pair = new Pair<>(processor,executorThis);
         this.defaultChannelInactiveProcessor = pair;
     }
 
@@ -259,6 +252,11 @@ public class NettyRemotingServer extends NettyRemotingBase implements RemotingSe
     }
 
     @Override
+    protected RPCHook getRPCHook() {
+        return null;
+    }
+
+    @Override
     public void registerRPCHook(RPCHook rpcHook) {
         this.rpcHook = rpcHook;
     }
@@ -273,5 +271,9 @@ public class NettyRemotingServer extends NettyRemotingBase implements RemotingSe
         public void channelInactive(ChannelHandlerContext ctx) throws Exception {
             processChannelInactive(ctx);
         }
+    }
+
+    public NettyServerConfig getConfig() {
+        return nettyServerConfig;
     }
 }

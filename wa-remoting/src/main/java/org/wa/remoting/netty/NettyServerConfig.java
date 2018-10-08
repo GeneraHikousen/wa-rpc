@@ -1,11 +1,11 @@
-package org.wa.remoting;
+package org.wa.remoting.netty;
 
 
 import static org.wa.common.utils.Constants.AVAILABLE_PROCESSORS;
 
 public class NettyServerConfig implements Cloneable{
 
-    private int listenPort = 8888;
+    private int listenPort = 6666;
 
     private int serverWorkerThreads = AVAILABLE_PROCESSORS << 1;
 

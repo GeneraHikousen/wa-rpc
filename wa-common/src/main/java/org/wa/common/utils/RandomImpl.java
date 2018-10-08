@@ -13,6 +13,8 @@ import java.util.Random;
 public class RandomImpl<E> {
     private static final Random random = new Random();
     public static <E> E getRandomElement(Collection<E> c) {
+        if(c.isEmpty())
+            return null;
         return new ArrayList<>(c).get(random.nextInt(c.size()));
     }
 }

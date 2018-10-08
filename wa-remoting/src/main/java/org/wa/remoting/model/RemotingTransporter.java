@@ -1,6 +1,6 @@
 package org.wa.remoting.model;
 
-import org.wa.common.protocal.WaProtocol;
+import org.wa.common.protocal.WaProtocal;
 import org.wa.common.transport.body.CommonCustomBody;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -44,7 +44,7 @@ public class RemotingTransporter extends ByteHolder{
         RemotingTransporter remotingTransporter = new RemotingTransporter();
         remotingTransporter.setCode(code);
         remotingTransporter.customHeader = customHeader;
-        remotingTransporter.transporterType = WaProtocol.REQUEST_REMOTING;
+        remotingTransporter.transporterType = WaProtocal.REQUEST_REMOTING;
         return remotingTransporter;
     }
 
@@ -55,12 +55,12 @@ public class RemotingTransporter extends ByteHolder{
      * @param opaque    此响应对象对应的请求对象ID
      * @return
      */
-    public RemotingTransporter createResponseTransporter(byte code,CommonCustomBody customHeader,long opaque){
+    public static RemotingTransporter createResponseTransporter(byte code,CommonCustomBody customHeader,long opaque){
         RemotingTransporter remotingTransporter = new RemotingTransporter();
         remotingTransporter.setCode(code);
         remotingTransporter.customHeader = customHeader;
         remotingTransporter.setOpaque(opaque);
-        remotingTransporter.transporterType = WaProtocol.RESPONSE_REMOTING;
+        remotingTransporter.transporterType = WaProtocal.RESPONSE_REMOTING;
         return remotingTransporter;
     }
 

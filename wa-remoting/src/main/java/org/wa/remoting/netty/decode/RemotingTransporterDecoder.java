@@ -6,12 +6,13 @@ import io.netty.handler.codec.ReplayingDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wa.common.exception.remoting.RemotingContextException;
-import org.wa.common.protocal.WaProtocol;
+import org.wa.common.protocal.WaProtocal;
 import org.wa.remoting.model.RemotingTransporter;
 
 import java.util.List;
 
-import static org.wa.common.protocal.WaProtocol.MAGIC;
+import static org.wa.common.protocal.WaProtocal.MAGIC;
+
 
 /**
  * @Auther: XF
@@ -24,7 +25,7 @@ public class RemotingTransporterDecoder extends ReplayingDecoder<RemotingTranspo
 
     private static final int MAX_BODY_SIZE = 1024 * 1024 * 5;
 
-    private final WaProtocol header = new WaProtocol();
+    private final WaProtocal header = new WaProtocal();
 
     public RemotingTransporterDecoder() {
         //设置(下文#state()的默认返回对象)

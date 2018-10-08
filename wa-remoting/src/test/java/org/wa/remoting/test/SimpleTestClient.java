@@ -2,7 +2,7 @@ package org.wa.remoting.test;
 
 import org.wa.common.exception.remoting.RemotingCommonCustomException;
 import org.wa.common.exception.remoting.RemotingException;
-import org.wa.common.protocal.WaProtocol;
+import org.wa.common.protocal.WaProtocal;
 import org.wa.common.transport.body.CommonCustomBody;
 import org.wa.remoting.model.RemotingTransporter;
 import org.wa.remoting.netty.NettyClientConfig;
@@ -18,7 +18,7 @@ public class SimpleTestClient {
         NettyRemotingClient client = new NettyRemotingClient(new NettyClientConfig());
         client.init();
         client.start();
-        RemotingTransporter request = RemotingTransporter.createRequestTransporter(WaProtocol.REQUEST_REMOTING, new CommonCustomBody() {
+        RemotingTransporter request = RemotingTransporter.createRequestTransporter(WaProtocal.REQUEST_REMOTING, new CommonCustomBody() {
             @Override
             public void checkFields() throws RemotingCommonCustomException {
 

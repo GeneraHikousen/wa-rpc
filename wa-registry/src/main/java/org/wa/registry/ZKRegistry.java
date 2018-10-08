@@ -24,7 +24,9 @@ import static org.wa.common.utils.RandomImpl.getRandomElement;
  */
 public class ZKRegistry {
 
-    private static Logger logger = LoggerFactory.getLogger(ZKRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(ZKRegistry.class);
+
+    private boolean isStart;
 
     private ZKServiceConfig config;
 
@@ -45,6 +47,7 @@ public class ZKRegistry {
         connectZK();
         createRootNodeIfNotExist();
         watchRootNode();
+        isStart=true;
     }
 
     private void connectZK() {
@@ -165,7 +168,11 @@ public class ZKRegistry {
      * @return 随机返回一个服务名对应的provider
      */
     public synchronized String getProviderAddr(String serviceName) {
-        return getRandomElement(serviceTable.get(serviceName));
+        Set<String> serviceProviderAddrs = serviceTable.get(serviceName);
+        if(serviceProviderAddrs.isEmpty())
+            return null;
+        //随机获取一个地址
+        return getRandomElement(serviceProviderAddrs);
     }
 
     /**
@@ -228,6 +235,10 @@ public class ZKRegistry {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        isStart=false;
     }
 
+    public boolean isStart() {
+        return isStart;
+    }
 }

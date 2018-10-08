@@ -90,6 +90,10 @@ public class NettyRemotingClient extends NettyRemotingBase implements RemotingCl
         init();
     }
 
+    public  NettyRemotingClient(){
+        this(null);
+    }
+
     @Override
     protected RPCHook getRPCHook() {
         return rpcHook;

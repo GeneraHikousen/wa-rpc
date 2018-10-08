@@ -1,7 +1,7 @@
 package org.wa.remoting.test;
 
 import org.wa.remoting.netty.NettyRemotingServer;
-import org.wa.remoting.NettyServerConfig;
+import org.wa.remoting.netty.NettyServerConfig;
 
 /**
  * @Auther: XF
