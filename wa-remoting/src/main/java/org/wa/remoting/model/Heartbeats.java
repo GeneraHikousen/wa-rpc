@@ -3,9 +3,10 @@ package org.wa.remoting.model;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import static org.wa.common.protocal.WaProtocol.HEAD_LENGTH;
-import static org.wa.common.protocal.WaProtocol.HEARTBEAT;
-import static org.wa.common.protocal.WaProtocol.MAGIC;
+import static org.wa.common.protocal.WaProtocal.HEAD_LENGTH;
+import static org.wa.common.protocal.WaProtocal.HEARTBEAT;
+import static org.wa.common.protocal.WaProtocal.MAGIC;
+
 
 /**
  * @Auther: XF

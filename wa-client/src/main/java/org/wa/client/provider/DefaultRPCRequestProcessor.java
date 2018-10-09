@@ -12,11 +12,9 @@ import org.wa.common.transport.body.RespondCustomBody;
 import org.wa.remoting.model.NettyRequestProcessor;
 import org.wa.remoting.model.RemotingTransporter;
 
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.wa.common.serialization.SerializerHolder.serializerImpl;
-import static org.wa.common.utils.Reflects.findMatchingParameterTypes;
 import static org.wa.common.utils.Reflects.invoke;
 import static org.wa.common.utils.Reflects.newInstance;
 
@@ -28,6 +26,7 @@ import static org.wa.common.utils.Reflects.newInstance;
 public class DefaultRPCRequestProcessor implements NettyRequestProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultRPCRequestProcessor.class);
+
     private static final ConcurrentHashMap<String, ServiceWrapper> serviceTable = new ConcurrentHashMap<>();
 
     public void addService(String serviceName,ServiceWrapper serviceWrapper){
@@ -52,13 +51,14 @@ public class DefaultRPCRequestProcessor implements NettyRequestProcessor {
         Object serviceObject = null;
         if (serviceWrapper.isObjectSupport()) {   //以对象形式提供服务
             serviceObject = serviceWrapper.getObject();
-        } else {
+        } else {    //需要初始化对象
             serviceObject = newInstance(serviceWrapper.getClazz());
         }
 
-        String methodName = serviceWrapper.getMethodName();
-        Class<?>[] parameterTypes = findMatchingParameterTypes(serviceWrapper.getParameters(), requestBody.getArgs());
-        result = invoke(serviceObject, methodName, parameterTypes, requestBody.getArgs());
+        String methodName = requestBody.getMethodName();
+        Class<?>[] parameterTypes = requestBody.getParameterTypes();
+        Object[] args = requestBody.getArgs();
+        result = invoke(serviceObject, methodName, parameterTypes, args);
         RespondCustomBody respondCustomBody = new RespondCustomBody(result, null, true);
 
         RemotingTransporter respond = RemotingTransporter.createResponseTransporter(WaProtocal.RPC_RESPONSE, respondCustomBody, request.getOpaque());

@@ -5,7 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.wa.remoting.model.RemotingTransporter;
 
-import static org.wa.common.protocal.WaProtocol.MAGIC;
+import static org.wa.common.protocal.WaProtocal.MAGIC;
+import static org.wa.common.protocal.WaProtocal.MAGIC;
 import static org.wa.common.serialization.SerializerHolder.serializerImpl;
 
 

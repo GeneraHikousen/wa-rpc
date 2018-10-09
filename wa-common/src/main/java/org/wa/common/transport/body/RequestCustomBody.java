@@ -15,8 +15,10 @@ public class RequestCustomBody implements CommonCustomBody{
     private static final AtomicLong invokeIdGenerator = new AtomicLong(0);
 
     private final long invokeID;    //调用ID
-    private String serviceName; //服务名
+    private String serviceName; //服务名(类名)
+    private String methodName;  //方法名
     private Object[] args;  //参数
+    private Class<?>[] parameterTypes;  //参数类型列表
     private long timestamp;
 
     public RequestCustomBody(){
@@ -55,7 +57,21 @@ public class RequestCustomBody implements CommonCustomBody{
         this.timestamp = timestamp;
     }
 
+    public Class<?>[] getParameterTypes() {
+        return parameterTypes;
+    }
 
+    public void setParameterTypes(Class<?>[] parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
 
     @Override
     public void checkFields() throws RemotingCommonCustomException {

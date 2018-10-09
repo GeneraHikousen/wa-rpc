@@ -4,6 +4,7 @@ import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wa.common.exception.remoting.RemotingException;
 
 import java.io.IOException;
 import java.util.*;
@@ -167,10 +168,12 @@ public class ZKRegistry {
      * @param serviceName 服务名
      * @return 随机返回一个服务名对应的provider
      */
-    public synchronized String getProviderAddr(String serviceName) {
+    public synchronized String getProviderAddr(String serviceName) throws RemotingException {
         Set<String> serviceProviderAddrs = serviceTable.get(serviceName);
-        if(serviceProviderAddrs.isEmpty())
-            return null;
+        if(serviceProviderAddrs==null||serviceProviderAddrs.isEmpty()){
+            throw new RemotingException("no service on line");
+        }
+
         //随机获取一个地址
         return getRandomElement(serviceProviderAddrs);
     }

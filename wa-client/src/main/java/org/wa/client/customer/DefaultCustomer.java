@@ -5,7 +5,6 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wa.client.service.HelloService;
 import org.wa.common.exception.remoting.RemotingException;
 import org.wa.common.protocal.WaProtocal;
 import org.wa.common.serialization.SerializerHolder;
@@ -43,24 +42,24 @@ public class DefaultCustomer<T> {
         client.start();
     }
 
-   T getRemotingInstance(Class<T> clazz){
-        return (T)new CglibProxy().getProxy(clazz);
-    }
+    class CglibProxy<T> implements MethodInterceptor{
 
-    class CglibProxy implements MethodInterceptor{
+        private Class<T> clazz;
 
-        public Object getProxy(Class clazz){
+        public CglibProxy(Class<T> clazz){
+            this.clazz = clazz;
+        }
+
+        public  T getProxy(){
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(clazz);
             enhancer.setCallback(this);
-            return enhancer.create();
+            return (T) enhancer.create();
         }
 
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-            //被代理类
-            Class clazz = o.getClass();
-
+            System.out.println(clazz.getName());
             String addr = zkRegistry.getProviderAddr(clazz.getName());
 
             if(addr==null){ //没有找到提供服务的远程主机
@@ -68,9 +67,14 @@ public class DefaultCustomer<T> {
                 throw new RemotingException("no provide on line");
             }
 
+            /*初始化一个请求对象*/
             RequestCustomBody body = new RequestCustomBody();
             body.setServiceName(clazz.getName());
             body.setArgs(objects);
+            body.setParameterTypes(method.getParameterTypes());
+            body.setMethodName(method.getName());
+
+            /*发送给远程主机，获得返回结果*/
             RemotingTransporter requestTransporter = RemotingTransporter.createRequestTransporter(WaProtocal.RPC_REQUEST,body);
             RemotingTransporter respondTransporter = client.invokeSync(addr, requestTransporter, 1000);
             RespondCustomBody respondCustomBody = SerializerHolder.serializerImpl().readObject(respondTransporter.bytes(),RespondCustomBody.class);
@@ -94,22 +98,13 @@ public class DefaultCustomer<T> {
         this.client = client;
     }
 
+
+    public Object getRemotingProxy(Class clazz){
+        return new CglibProxy(clazz).getProxy();
+    }
+
     public static void main(String[] args) {
-//        class HelloProxy implements MethodInterceptor{
-//            @Override
-//            public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-//                logger.info("before method invoke ");
-//                 Object ret = methodProxy.invokeSuper(o,objects);
-//                logger.info("after method invoke ");
-//                return ret;
-//            }
-//        }
-//        Enhancer enhancer = new Enhancer();
-//        enhancer.setSuperclass(HelloService.class);
-//        enhancer.setCallback(new HelloProxy());
-//        HelloService helloService = (HelloService) enhancer.create();
-//        String s = helloService.sayHello();
-//        System.out.println(s);
+
 
 
     }

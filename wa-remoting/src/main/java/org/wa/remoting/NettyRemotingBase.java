@@ -67,6 +67,7 @@ public abstract class NettyRemotingBase {
                 public void operationComplete(ChannelFuture future) throws Exception {
                     if (future.isSuccess()) { //如果发送成功，则设置状态为成功
                         response.setSendRequestOK(true);
+                        logger.info("user channel [{}] send msg [{}] succeed", channel, request);
                     } else {
                         response.setSendRequestOK(false);
                         //发送失败，将respond从“篮子”中移除

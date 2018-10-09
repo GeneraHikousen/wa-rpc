@@ -1,7 +1,6 @@
-package org.wa.client.provider.model;
+package org.wa.client.provider;
 
-import org.wa.client.provider.DefaultRPCRequestProcessor;
-import org.wa.common.protocal.WaProtocal;
+import org.wa.client.provider.model.ServiceWrapper;
 import org.wa.common.utils.NetUtil;
 import org.wa.registry.ZKRegistry;
 import org.wa.remoting.netty.NettyRemotingServer;
@@ -12,7 +11,7 @@ import java.util.concurrent.Executors;
 /**
  * @Auther: XF
  * @Date: 2018/10/7 19:12
- * @Description:
+ * @Description: 默认生产者
  */
 public class DefaultProvider {
 
@@ -43,16 +42,35 @@ public class DefaultProvider {
         server.registerDefaultProcessor(defaultRpcRequestProcessor,publicExecutors);
         server.init();
         server.start();
-
     }
 
-    public void registerService(String serviceName,ServiceWrapper serviceWrapper){
+    /**
+     * 将一个类注册为服务
+     * 每次rpc调用都会通过反射创建一个对象
+     * @param clazz
+     */
+    public void registerService(Class<?> interface_,Class clazz){
         //本机IP+server端口
         String addr = NetUtil.getServerIp()+":"+server.getConfig().getListenPort();
+        String serviceName = interface_.getName();
         //先写入注册中心
         zkRegistry.registerProvider(serviceName,addr);
         //把服务添加到rpc处理器中
-        defaultRpcRequestProcessor.addService(serviceName,serviceWrapper);
+        defaultRpcRequestProcessor.addService(serviceName,new ServiceWrapper(interface_,clazz));
+    }
+
+    /**
+     * 将一个对象注册为服务
+     * 每一次调用都会调用该对象的方法，不保证线程安全
+     */
+    public void registerService(Class<?> interface_,Object object){
+        //本机IP+server端口
+        String addr = NetUtil.getServerIp()+":"+server.getConfig().getListenPort();
+        String serviceName = interface_.getName();
+        //先写入注册中心
+        zkRegistry.registerProvider(serviceName,addr);
+        //把服务添加到rpc处理器中
+        defaultRpcRequestProcessor.addService(serviceName,new ServiceWrapper(interface_,object));
     }
 
     public NettyRemotingServer getServer() {
